@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 // app.use('/api/payments', require('./routes/paymentRoutes'))
 
 // error middleware
-// app.use(require('./middleware/errorMiddleware'))
+app.use(require('./middleware/errorMiddleware'))
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {

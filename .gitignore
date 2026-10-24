@@ -31,3 +31,5 @@ coverage/
 # Keys
 *.pem
 *.key
+
+mongo.txt
