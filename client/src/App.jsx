@@ -2,9 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import Layout from '@/components/common/Layout'
+import Layout from '@/components/common/Layout';
+import DashboardPage from '@/pages/DashboardPage'
 
-const Dashboard = () => "Dashboard - Logged in"
 const Products = () => "Products page"
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
 
         {/* Protected routes */}
-        <Route path="/" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
+        <Route path="/" element={<ProtectedRoute><Layout><DashboardPage /></Layout></ProtectedRoute>} />
         <Route path="/products" element={<ProtectedRoute><Layout><Products /></Layout></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
