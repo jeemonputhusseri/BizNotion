@@ -3,9 +3,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import Layout from '@/components/common/Layout';
-import DashboardPage from '@/pages/DashboardPage'
-
-const Products = () => "Products page"
+import DashboardPage from '@/pages/DashboardPage';
+import ProductsPage from "./pages/ProductsPage";
 
 function App() {
   return (
@@ -17,7 +16,7 @@ function App() {
 
         {/* Protected routes */}
         <Route path="/" element={<ProtectedRoute><Layout><DashboardPage /></Layout></ProtectedRoute>} />
-        <Route path="/products" element={<ProtectedRoute><Layout><Products /></Layout></ProtectedRoute>} />
+        <Route path="/products" element={<ProtectedRoute><Layout><ProductsPage /></Layout></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )

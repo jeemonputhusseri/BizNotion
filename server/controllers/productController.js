@@ -47,7 +47,47 @@ const createProduct = async (req, res, next) => {
   }
 }
 
+const getProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find({ userId: req.user.id }).sort({ createdAt: -1 })
+    res.json({ data: products, totalCount: products.length, currentPage: 1, totalPages: 1, limit: 10 })
+  } catch (error) { next(error) }
+}
+
+const getProductById = async (req, res, next) => {
+  try {
+    const product = await Product.findOne({ _id: req.params.id, userId: req.user.id })
+    if (!product) { const err = new Error('Product not found'); err.status = 404; return next(err) }
+    res.json(product)
+  } catch (error) { next(error) }
+}
+
+const updateProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user.id },
+      { ...req.body },
+      { new: true, runValidators: true }
+    )
+    if (!product) { const err = new Error('Product not found'); err.status = 404; return next(err) }
+    res.json(product)
+  } catch (error) { next(error) }
+}
+
+const deleteProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findOneAndDelete({ _id: req.params.id, userId: req.user.id })
+    if (!product) { const err = new Error('Product not found'); err.status = 404; return next(err) }
+    res.json({ message: 'Product deleted' })
+  } catch (error) { next(error) }
+}
+
+
 
 module.exports = {
   createProduct,
+  getProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct
 }
