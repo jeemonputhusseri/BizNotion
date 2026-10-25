@@ -19,9 +19,9 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/auth', require('./routes/authRoutes'))
-// app.use('/api/products', require('./routes/productRoutes'))
+app.use('/api/products', require('./routes/productRoutes'))
 // app.use('/api/inquiries', require('./routes/inquiryRoutes'))
-// app.use('/api/dashboard', require('./routes/dashboardRoutes'))
+app.use('/api/dashboard', require('./routes/dashboardRoutes'))
 // app.use('/api/payments', require('./routes/paymentRoutes'))
 
 app.use(require('./middleware/errorMiddleware'))
