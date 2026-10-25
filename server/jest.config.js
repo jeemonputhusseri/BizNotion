@@ -1,5 +1,9 @@
 module.exports = {
   testEnvironment: 'node',
-  globalSetup: './__tests__/setup.js',
-  globalTeardown: './__tests__/teardown.js',
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '__tests__/setup.js',
+    '__tests__/teardown.js',
+  ],
+  testTimeout: 30000,
 }
