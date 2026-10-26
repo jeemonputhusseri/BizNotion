@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axiosInstance from '@/api/axiosInstance'
 import { Button } from '@/components/ui/button'
+import ProductList from '@/components/products/ProductList'
 
 const STATUSES = ['All', 'Draft', 'Listed', 'Sold']
 
@@ -85,12 +86,8 @@ const ProductsPage = () => {
         </div>
       )}
 
-      {!loading && products.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {products.map((product) => (
-           "Product card"
-          ))}
-        </div>
+      {!loading && !error && products.length > 0 && (
+        <ProductList products={products} onDelete={handleDelete} />
       )}
 
     </div>
