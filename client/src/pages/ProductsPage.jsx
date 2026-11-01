@@ -42,7 +42,6 @@ const ProductsPage = () => {
 
   return (
     <div className="space-y-6">
-
       {/* header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Products</h1>
@@ -69,13 +68,9 @@ const ProductsPage = () => {
       </div>
 
       {/* content */}
-      {loading && (
-        <p className="text-muted-foreground text-sm">Loading....</p>
-      )}
+      {loading && <p className="text-muted-foreground text-sm">Loading....</p>}
 
-      {error && (
-        <p className="text-destructive text-sm">{error}</p>
-      )}
+      {error && <p className="text-destructive text-sm">{error}</p>}
 
       {!loading && !error && products.length === 0 && (
         <div className="text-center py-16 text-muted-foreground">
@@ -89,7 +84,6 @@ const ProductsPage = () => {
       {!loading && !error && products.length > 0 && (
         <ProductList products={products} onDelete={handleDelete} />
       )}
-
     </div>
   )
 }

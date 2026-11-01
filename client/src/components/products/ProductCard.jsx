@@ -4,20 +4,15 @@ import { Button } from '@/components/ui/button'
 import StatusBadge from '@/components/common/StatusBadge'
 
 const ProductCard = ({ product, onDelete }) => {
-  const formattedPrice = product.price != null
-    ? `Rs. ${Number(product.price).toFixed(2)}`
-    : 'Rs. 0.00'
+  const formattedPrice =
+    product.price != null ? `Rs. ${Number(product.price).toFixed(2)}` : 'Rs. 0.00'
 
   return (
     <Card className="overflow-hidden">
       {/* image or placeholder with product initial */}
       <div className="aspect-square w-full bg-muted flex items-center justify-center">
         {product.imageUrl ? (
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full h-full object-cover"
-          />
+          <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
         ) : (
           <span className="text-4xl font-bold text-muted-foreground/40">
             {product.name?.charAt(0).toUpperCase() || '?'}

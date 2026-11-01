@@ -21,10 +21,11 @@ const RegisterPage = () => {
     setLoading(true)
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
-        { name, email, password }
-      )
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+        name,
+        email,
+        password,
+      })
       navigate('/login', { state: { message: 'Account created successfully. Please sign in.' } })
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong')

@@ -1,12 +1,11 @@
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import StatCard from '@/components/dashboard/StatCard';
+import { Link } from 'react-router-dom'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import StatCard from '@/components/dashboard/StatCard'
 
 const DashboardPage = () => {
   return (
     <div className="space-y-8">
-
       {/* page header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Dashboard</h1>
@@ -36,7 +35,6 @@ const DashboardPage = () => {
           </CardContent>
         </Card>
       </div>
-
     </div>
   )
 }

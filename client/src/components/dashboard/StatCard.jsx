@@ -1,12 +1,10 @@
-import React from "react"
+import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const StatCard = ({ label, count }) => (
   <Card>
     <CardHeader className="pb-2">
-      <CardTitle className="text-sm font-medium text-muted-foreground">
-        {label}
-      </CardTitle>
+      <CardTitle className="text-sm font-medium text-muted-foreground">{label}</CardTitle>
     </CardHeader>
     <CardContent>
       <p className="text-3xl font-bold">{count}</p>
@@ -14,4 +12,4 @@ const StatCard = ({ label, count }) => (
   </Card>
 )
 
-export  default StatCard;
+export default StatCard
