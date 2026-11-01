@@ -1,5 +1,4 @@
-import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const StatCard = ({ label, count }) => (
   <Card>
@@ -10,6 +9,6 @@ const StatCard = ({ label, count }) => (
       <p className="text-3xl font-bold">{count}</p>
     </CardContent>
   </Card>
-)
+);
 
-export default StatCard
+export default StatCard;

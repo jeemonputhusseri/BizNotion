@@ -1,41 +1,41 @@
-import React, { useState } from 'react'
-import { useAuth } from '@/context/AuthProvider'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useLocation } from 'react-router-dom'
-import { useNavigate, Link } from 'react-router-dom'
-import axios from 'axios'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { useState } from 'react';
+import { useAuth } from '@/context/AuthProvider';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useLocation } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const location = useLocation()
-  const successMessage = location.state?.message
-  const { login } = useAuth()
-  const navigate = useNavigate()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const successMessage = location.state?.message;
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         email,
         password,
-      })
-      login(res.data.user, res.data.token)
-      navigate('/')
+      });
+      login(res.data.user, res.data.token);
+      navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong')
+      setError(err.response?.data?.message || 'Something went wrong');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -94,7 +94,7 @@ const LoginPage = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

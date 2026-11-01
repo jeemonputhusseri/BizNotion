@@ -1,12 +1,31 @@
-import { Link } from 'react-router-dom'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import StatCard from '@/components/dashboard/StatCard'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axiosInstance from '@/api/axiosInstance';
+import { Button } from '@/components/ui/button';
+import StatCard from '@/components/dashboard/StatCard';
+import RecentInquiries from '@/components/dashboard/RecentInquiries';
 
 const DashboardPage = () => {
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const res = await axiosInstance.get('/api/dashboard');
+        setStats(res.data);
+      } catch (err) {
+        setError('Failed to load dashboard');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDashboard();
+  }, []);
+
   return (
     <div className="space-y-8">
-      {/* page header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <div className="flex gap-2">
@@ -19,24 +38,25 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* stat cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard label="Total Products" count={0} />
-        <StatCard label="Open Inquiries" count={0} />
-        <StatCard label="Closed Inquiries" count={0} />
-      </div>
+      {loading && <p className="text-muted-foreground text-sm">Loading...</p>}
+      {error && <p className="text-destructive text-sm">{error}</p>}
 
-      {/* recent inquiries */}
-      <div>
-        <h2 className="text-base font-semibold mb-4">Recent Inquiries</h2>
-        <Card>
-          <CardContent className="py-10 text-center text-muted-foreground text-sm">
-            No inquiries yet. Add your first inquiry to get started.
-          </CardContent>
-        </Card>
-      </div>
+      {!loading && !error && stats && (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <StatCard label="Total Products" count={stats.productCount} />
+            <StatCard label="Open Inquiries" count={stats.openInquiryCount} />
+            <StatCard label="Closed Inquiries" count={stats.closedInquiryCount} />
+          </div>
+
+          <div>
+            <h2 className="text-base font-semibold mb-4">Recent Inquiries</h2>
+            <RecentInquiries inquiries={stats.recentInquiries} />
+          </div>
+        </>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default DashboardPage
+export default DashboardPage;

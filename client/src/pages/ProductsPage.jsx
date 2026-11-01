@@ -1,44 +1,44 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import axiosInstance from '@/api/axiosInstance'
-import { Button } from '@/components/ui/button'
-import ProductList from '@/components/products/ProductList'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axiosInstance from '@/api/axiosInstance';
+import { Button } from '@/components/ui/button';
+import ProductList from '@/components/products/ProductList';
 
-const STATUSES = ['All', 'Draft', 'Listed', 'Sold']
+const STATUSES = ['All', 'Draft', 'Listed', 'Sold'];
 
 const ProductsPage = () => {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [activeFilter, setActiveFilter] = useState('All')
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [activeFilter, setActiveFilter] = useState('All');
 
   const fetchProducts = async (status) => {
-    setLoading(true)
-    setError('')
+    setLoading(true);
+    setError('');
     try {
-      const params = status && status !== 'All' ? { status } : {}
-      const res = await axiosInstance.get('/api/products', { params })
-      setProducts(res.data.data)
+      const params = status && status !== 'All' ? { status } : {};
+      const res = await axiosInstance.get('/api/products', { params });
+      setProducts(res.data.data);
     } catch (err) {
-      setError('Failed to load products')
+      setError('Failed to load products');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchProducts(activeFilter)
-  }, [activeFilter])
+    fetchProducts(activeFilter);
+  }, [activeFilter]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this product?')) return
+    if (!window.confirm('Delete this product?')) return;
     try {
-      await axiosInstance.delete(`/api/products/${id}`)
-      setProducts((prev) => prev.filter((p) => p._id !== id))
+      await axiosInstance.delete(`/api/products/${id}`);
+      setProducts((prev) => prev.filter((p) => p._id !== id));
     } catch (err) {
-      alert('Failed to delete product')
+      alert('Failed to delete product');
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -85,7 +85,7 @@ const ProductsPage = () => {
         <ProductList products={products} onDelete={handleDelete} />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProductsPage
+export default ProductsPage;

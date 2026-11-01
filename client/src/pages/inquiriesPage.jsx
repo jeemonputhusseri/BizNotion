@@ -1,44 +1,44 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import axiosInstance from '@/api/axiosInstance'
-import { Button } from '@/components/ui/button'
-import InquiryList from '@/components/inquiries/InquiryList'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axiosInstance from '@/api/axiosInstance';
+import { Button } from '@/components/ui/button';
+import InquiryList from '@/components/inquiries/InquiryList';
 
-const STATUSES = ['All', 'New', 'Contacted', 'Follow-up', 'Closed']
+const STATUSES = ['All', 'New', 'Contacted', 'Follow-up', 'Closed'];
 
 const InquiriesPage = () => {
-  const [inquiries, setInquiries] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [activeFilter, setActiveFilter] = useState('All')
+  const [inquiries, setInquiries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [activeFilter, setActiveFilter] = useState('All');
 
   const fetchInquiries = async (status) => {
-    setLoading(true)
-    setError('')
+    setLoading(true);
+    setError('');
     try {
-      const params = status && status !== 'All' ? { status } : {}
-      const res = await axiosInstance.get('/api/inquiries', { params })
-      setInquiries(res.data.data)
+      const params = status && status !== 'All' ? { status } : {};
+      const res = await axiosInstance.get('/api/inquiries', { params });
+      setInquiries(res.data.data);
     } catch (err) {
-      setError('Failed to load inquiries')
+      setError('Failed to load inquiries');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchInquiries(activeFilter)
-  }, [activeFilter])
+    fetchInquiries(activeFilter);
+  }, [activeFilter]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this inquiry?')) return
+    if (!window.confirm('Delete this inquiry?')) return;
     try {
-      await axiosInstance.delete(`/api/inquiries/${id}`)
-      setInquiries((prev) => prev.filter((i) => i._id !== id))
+      await axiosInstance.delete(`/api/inquiries/${id}`);
+      setInquiries((prev) => prev.filter((i) => i._id !== id));
     } catch (err) {
-      alert('Failed to delete inquiry')
+      alert('Failed to delete inquiry');
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -81,7 +81,7 @@ const InquiriesPage = () => {
         <InquiryList inquiries={inquiries} onDelete={handleDelete} />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default InquiriesPage
+export default InquiriesPage;

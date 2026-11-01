@@ -1,20 +1,20 @@
-import { NavLink, useNavigate } from 'react-router-dom'
-import { useAuth } from '@/context/AuthProvider'
-import { Button } from '@/components/ui/button'
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthProvider';
+import { Button } from '@/components/ui/button';
 
 const NavBar = () => {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
+    logout();
+    navigate('/login');
+  };
 
   const navLinkClass = ({ isActive }) =>
     `text-sm font-medium transition-colors hover:text-primary ${
       isActive ? 'text-primary' : 'text-muted-foreground'
-    }`
+    }`;
 
   return (
     <header className="border-b bg-background sticky top-0 z-50">
@@ -44,7 +44,7 @@ const NavBar = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default NavBar
+export default NavBar;

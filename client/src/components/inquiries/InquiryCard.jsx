@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import StatusBadge from '@/components/common/StatusBadge'
+import { Link } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import StatusBadge from '@/components/common/StatusBadge';
 
 const InquiryCard = ({ inquiry, onDelete }) => {
   const formattedDate = new Date(inquiry.date).toLocaleDateString('en-IN', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
-  })
+  });
 
   return (
     <Card>
@@ -43,7 +43,7 @@ const InquiryCard = ({ inquiry, onDelete }) => {
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default InquiryCard
+export default InquiryCard;

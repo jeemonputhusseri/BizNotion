@@ -1,4 +1,4 @@
-import NavBar from '@/components/common/NavBar'
+import NavBar from '@/components/common/NavBar';
 
 const Layout = ({ children }) => {
   return (
@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
       <NavBar />
       <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

@@ -1,38 +1,38 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import axios from 'axios'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 const RegisterPage = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         name,
         email,
         password,
-      })
-      navigate('/login', { state: { message: 'Account created successfully. Please sign in.' } })
+      });
+      navigate('/login', { state: { message: 'Account created successfully. Please sign in.' } });
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong')
+      setError(err.response?.data?.message || 'Something went wrong');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -99,7 +99,7 @@ const RegisterPage = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;

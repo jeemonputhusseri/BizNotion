@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useParams, Link } from 'react-router-dom'
-import axiosInstance from '@/api/axiosInstance'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import axiosInstance from '@/api/axiosInstance';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const STATUSES = ['Draft', 'Listed', 'Sold']
+const STATUSES = ['Draft', 'Listed', 'Sold'];
 
 const ProductFormPage = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const isEdit = Boolean(id)
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEdit = Boolean(id);
 
   const [form, setForm] = useState({
     name: '',
@@ -21,17 +21,17 @@ const ProductFormPage = () => {
     description: '',
     imageUrl: '',
     notes: '',
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // fetch existing product if editing
   useEffect(() => {
-    if (!isEdit) return
+    if (!isEdit) return;
     const fetchProduct = async () => {
       try {
-        const res = await axiosInstance.get(`/api/products/${id}`)
-        const p = res.data
+        const res = await axiosInstance.get(`/api/products/${id}`);
+        const p = res.data;
         setForm({
           name: p.name || '',
           category: p.category || '',
@@ -40,42 +40,42 @@ const ProductFormPage = () => {
           description: p.description || '',
           imageUrl: p.imageUrl || '',
           notes: p.notes || '',
-        })
+        });
       } catch (err) {
-        setError('Failed to load product')
+        setError('Failed to load product');
       }
-    }
-    fetchProduct()
-  }, [id, isEdit])
+    };
+    fetchProduct();
+  }, [id, isEdit]);
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
     try {
       const payload = {
         ...form,
         price: parseFloat(form.price),
-      }
+      };
 
       if (isEdit) {
-        await axiosInstance.put(`/api/products/${id}`, payload)
+        await axiosInstance.put(`/api/products/${id}`, payload);
       } else {
-        await axiosInstance.post('/api/products', payload)
+        await axiosInstance.post('/api/products', payload);
       }
 
-      navigate('/products')
+      navigate('/products');
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong')
+      setError(err.response?.data?.message || 'Something went wrong');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="max-w-xl mx-auto">
@@ -196,7 +196,7 @@ const ProductFormPage = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default ProductFormPage
+export default ProductFormPage;

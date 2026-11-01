@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import StatusBadge from '@/components/common/StatusBadge'
+import { Link } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import StatusBadge from '@/components/common/StatusBadge';
 
 const ProductCard = ({ product, onDelete }) => {
   const formattedPrice =
-    product.price != null ? `Rs. ${Number(product.price).toFixed(2)}` : 'Rs. 0.00'
+    product.price != null ? `Rs. ${Number(product.price).toFixed(2)}` : 'Rs. 0.00';
 
   return (
     <Card className="overflow-hidden">
@@ -46,7 +46,7 @@ const ProductCard = ({ product, onDelete }) => {
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default ProductCard
+export default ProductCard;

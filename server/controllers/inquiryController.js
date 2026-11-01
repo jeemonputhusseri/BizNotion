@@ -1,7 +1,7 @@
-const Inquiry = require('../models/Inquiry')
-const { validateRequiredFields } = require('../validators/inputValidators')
+const Inquiry = require('../models/Inquiry');
+const { validateRequiredFields } = require('../validators/inputValidators');
 
-const VALID_STATUSES = ['New', 'Contacted', 'Follow-up', 'Closed']
+const VALID_STATUSES = ['New', 'Contacted', 'Follow-up', 'Closed'];
 
 // create inquiry
 const createInquiry = async (req, res, next) => {
@@ -15,7 +15,7 @@ const createInquiry = async (req, res, next) => {
       return next(err)
     }
 
-    // validate status if provided
+    // validate status
     if (status && !VALID_STATUSES.includes(status)) {
       const err = new Error('Invalid inquiry status')
       err.status = 400
@@ -38,7 +38,7 @@ const createInquiry = async (req, res, next) => {
   }
 }
 
-// list inquiries - scoped to user, optional status filter, sorted by date desc
+// list inquiries
 const getInquiries = async (req, res, next) => {
   try {
     const { status } = req.query
@@ -54,7 +54,7 @@ const getInquiries = async (req, res, next) => {
   }
 }
 
-// get single inquiry by id
+// get single inquiry
 const getInquiryById = async (req, res, next) => {
   try {
     const inquiry = await Inquiry.findOne({ _id: req.params.id, userId: req.user.id })
@@ -116,4 +116,4 @@ module.exports = {
   getInquiryById,
   updateInquiry,
   deleteInquiry,
-}
+};

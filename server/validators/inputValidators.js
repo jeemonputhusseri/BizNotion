@@ -1,4 +1,4 @@
-// checks that required fields exist and are not empty strings. fields is an array like ['name', 'email', 'password'], body is req.body
+// checks that required fields exist and are not empty
 const validateRequiredFields = (fields, body) => {
   for (const field of fields) {
     if (!body[field] || body[field].toString().trim() === '') {
@@ -8,7 +8,7 @@ const validateRequiredFields = (fields, body) => {
     return null;
 }
 
-//  checks it looks like a valid email using a regex
+//  checks it looks like a valid email
 const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
@@ -17,7 +17,7 @@ const validateEmail = (email) => {
     return null;
 }
 
-// checks password is at least 8 characters
+// checks password at least 8 characters
 const validatePasswordLength = (password) => {
   if (password.length < 8) {
     return 'Password must be at least 8 characters'

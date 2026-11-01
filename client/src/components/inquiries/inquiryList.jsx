@@ -1,4 +1,4 @@
-import InquiryCard from './InquiryCard'
+import InquiryCard from './InquiryCard';
 
 const InquiryList = ({ inquiries, onDelete }) => {
   return (
@@ -7,7 +7,7 @@ const InquiryList = ({ inquiries, onDelete }) => {
         <InquiryCard key={inquiry._id} inquiry={inquiry} onDelete={onDelete} />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default InquiryList
+export default InquiryList;

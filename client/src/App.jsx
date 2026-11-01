@@ -1,13 +1,13 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
-import ProtectedRoute from './components/common/ProtectedRoute'
-import Layout from '@/components/common/Layout'
-import DashboardPage from '@/pages/DashboardPage'
-import ProductsPage from './pages/ProductsPage'
-import ProductFormPage from './pages/ProductFormPage'
-import InquiriesPage from './pages/InquiriesPage'
-import InquiryFormPage from './pages/InquiryFormPage'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import Layout from '@/components/common/Layout';
+import DashboardPage from '@/pages/DashboardPage';
+import ProductsPage from './pages/ProductsPage';
+import ProductFormPage from './pages/ProductFormPage';
+import InquiriesPage from './pages/InquiriesPage';
+import InquiryFormPage from './pages/InquiryFormPage';
 
 function App() {
   return (
@@ -91,6 +91,6 @@ function App() {
         />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
-export default App
+export default App;

@@ -1,4 +1,4 @@
-import ProductCard from './ProductCard'
+import ProductCard from './ProductCard';
 
 const ProductList = ({ products, onDelete }) => {
   return (
@@ -7,7 +7,7 @@ const ProductList = ({ products, onDelete }) => {
         <ProductCard key={product._id} product={product} onDelete={onDelete} />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;

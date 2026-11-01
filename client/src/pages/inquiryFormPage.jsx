@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useParams, Link } from 'react-router-dom'
-import axiosInstance from '@/api/axiosInstance'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import axiosInstance from '@/api/axiosInstance';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const STATUSES = ['New', 'Contacted', 'Follow-up', 'Closed']
+const STATUSES = ['New', 'Contacted', 'Follow-up', 'Closed'];
 
 const InquiryFormPage = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const isEdit = Boolean(id)
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEdit = Boolean(id);
 
   const [form, setForm] = useState({
     customerName: '',
@@ -20,16 +20,16 @@ const InquiryFormPage = () => {
     status: 'New',
     notes: '',
     date: new Date().toISOString().split('T')[0],
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!isEdit) return
+    if (!isEdit) return;
     const fetchInquiry = async () => {
       try {
-        const res = await axiosInstance.get(`/api/inquiries/${id}`)
-        const i = res.data
+        const res = await axiosInstance.get(`/api/inquiries/${id}`);
+        const i = res.data;
         setForm({
           customerName: i.customerName || '',
           contact: i.contact || '',
@@ -37,35 +37,35 @@ const InquiryFormPage = () => {
           status: i.status || 'New',
           notes: i.notes || '',
           date: i.date ? new Date(i.date).toISOString().split('T')[0] : '',
-        })
+        });
       } catch (err) {
-        setError('Failed to load inquiry')
+        setError('Failed to load inquiry');
       }
-    }
-    fetchInquiry()
-  }, [id, isEdit])
+    };
+    fetchInquiry();
+  }, [id, isEdit]);
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       if (isEdit) {
-        await axiosInstance.put(`/api/inquiries/${id}`, form)
+        await axiosInstance.put(`/api/inquiries/${id}`, form);
       } else {
-        await axiosInstance.post('/api/inquiries', form)
+        await axiosInstance.post('/api/inquiries', form);
       }
-      navigate('/inquiries')
+      navigate('/inquiries');
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong')
+      setError(err.response?.data?.message || 'Something went wrong');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="max-w-xl mx-auto">
@@ -164,7 +164,7 @@ const InquiryFormPage = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default InquiryFormPage
+export default InquiryFormPage;
