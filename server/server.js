@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
@@ -18,7 +17,24 @@ app.use(cors());
 app.use(express.json());
 
 app.use(helmet());
-app.use(mongoSanitize());
+// express-mongo-sanitize is incompatible with Express v5 (req.query is read-only)
+// manually sanitize req.body and req.params by stripping keys starting with $
+app.use((req, res, next) => {
+  const stripDollar = (obj) => {
+    if (obj && typeof obj === 'object') {
+      for (const key of Object.keys(obj)) {
+        if (key.startsWith('$')) {
+          delete obj[key]
+        } else {
+          stripDollar(obj[key])
+        }
+      }
+    }
+  }
+  stripDollar(req.body)
+  stripDollar(req.params)
+  next()
+})
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,

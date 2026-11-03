@@ -11,14 +11,19 @@ const ProductsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchProducts = async (status) => {
+  const fetchProducts = async (status, page) => {
     setLoading(true);
     setError('');
     try {
-      const params = status && status !== 'All' ? { status } : {};
+      const params = { page, limit: 10 };
+      if (status && status !== 'All') params.status = status;
       const res = await axiosInstance.get('/api/products', { params });
       setProducts(res.data.data);
+      setCurrentPage(res.data.currentPage);
+      setTotalPages(res.data.totalPages);
     } catch (err) {
       setError('Failed to load products');
     } finally {
@@ -27,8 +32,14 @@ const ProductsPage = () => {
   };
 
   useEffect(() => {
-    fetchProducts(activeFilter);
-  }, [activeFilter]);
+    fetchProducts(activeFilter, currentPage);
+  }, [activeFilter, currentPage]);
+
+  // reset to page 1 when filter changes
+  const handleFilterChange = (status) => {
+    setActiveFilter(status);
+    setCurrentPage(1);
+  };
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this product?')) return;
@@ -42,7 +53,6 @@ const ProductsPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Products</h1>
         <Button asChild size="sm">
@@ -50,12 +60,11 @@ const ProductsPage = () => {
         </Button>
       </div>
 
-      {/* status filter */}
       <div className="flex gap-2 flex-wrap">
         {STATUSES.map((s) => (
           <button
             key={s}
-            onClick={() => setActiveFilter(s)}
+            onClick={() => handleFilterChange(s)}
             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
               activeFilter === s
                 ? 'bg-primary text-primary-foreground'
@@ -67,9 +76,7 @@ const ProductsPage = () => {
         ))}
       </div>
 
-      {/* content */}
-      {loading && <p className="text-muted-foreground text-sm">Loading....</p>}
-
+      {loading && <p className="text-muted-foreground text-sm">Loading...</p>}
       {error && <p className="text-destructive text-sm">{error}</p>}
 
       {!loading && !error && products.length === 0 && (
@@ -83,6 +90,30 @@ const ProductsPage = () => {
 
       {!loading && !error && products.length > 0 && (
         <ProductList products={products} onDelete={handleDelete} />
+      )}
+
+      {!loading && totalPages > 1 && (
+        <div className="flex items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => p - 1)}
+          >
+            Previous
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}
+          >
+            Next
+          </Button>
+        </div>
       )}
     </div>
   );

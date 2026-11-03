@@ -49,18 +49,46 @@ const createProduct = async (req, res, next) => {
 
 const getProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({ userId: req.user.id }).sort({ createdAt: -1 })
-    res.json({ data: products, totalCount: products.length, currentPage: 1, totalPages: 1, limit: 10 })
-  } catch (error) { next(error) }
-}
+    const page = Math.max(1, parseInt(req.query.page) || 1)
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 10))
+    const skip = (page - 1) * limit
+
+    const filter = { userId: req.user.id }
+    if (req.query.status && VALID_STATUSES.includes(req.query.status)) {
+      filter.status = req.query.status
+    }
+
+    const [products, totalCount] = await Promise.all([
+      Product.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Product.countDocuments(filter),
+    ])
+
+    res.json({
+      data: products,
+      totalCount,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
+      limit,
+    })
+  } catch (error) {
+    next(error)
+  }
+};
 
 const getProductById = async (req, res, next) => {
   try {
     const product = await Product.findOne({ _id: req.params.id, userId: req.user.id })
-    if (!product) { const err = new Error('Product not found'); err.status = 404; return next(err) }
+    if (!product) {
+      const err = new Error('Product not found')
+      err.status = 404
+      return next(err)
+    }
     res.json(product)
-  } catch (error) { next(error) }
+  } catch (error) {
+    next(error)
+  }
 }
+
 
 const updateProduct = async (req, res, next) => {
   try {

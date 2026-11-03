@@ -11,14 +11,19 @@ const InquiriesPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchInquiries = async (status) => {
+  const fetchInquiries = async (status, page) => {
     setLoading(true);
     setError('');
     try {
-      const params = status && status !== 'All' ? { status } : {};
+      const params = { page, limit: 10 };
+      if (status && status !== 'All') params.status = status;
       const res = await axiosInstance.get('/api/inquiries', { params });
       setInquiries(res.data.data);
+      setCurrentPage(res.data.currentPage);
+      setTotalPages(res.data.totalPages);
     } catch (err) {
       setError('Failed to load inquiries');
     } finally {
@@ -27,8 +32,13 @@ const InquiriesPage = () => {
   };
 
   useEffect(() => {
-    fetchInquiries(activeFilter);
-  }, [activeFilter]);
+    fetchInquiries(activeFilter, currentPage);
+  }, [activeFilter, currentPage]);
+
+  const handleFilterChange = (status) => {
+    setActiveFilter(status);
+    setCurrentPage(1);
+  };
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this inquiry?')) return;
@@ -53,7 +63,7 @@ const InquiriesPage = () => {
         {STATUSES.map((s) => (
           <button
             key={s}
-            onClick={() => setActiveFilter(s)}
+            onClick={() => handleFilterChange(s)}
             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
               activeFilter === s
                 ? 'bg-primary text-primary-foreground'
@@ -79,6 +89,30 @@ const InquiriesPage = () => {
 
       {!loading && !error && inquiries.length > 0 && (
         <InquiryList inquiries={inquiries} onDelete={handleDelete} />
+      )}
+
+      {!loading && totalPages > 1 && (
+        <div className="flex items-center justify-center gap-4 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => p - 1)}
+          >
+            Previous
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}
+          >
+            Next
+          </Button>
+        </div>
       )}
     </div>
   );

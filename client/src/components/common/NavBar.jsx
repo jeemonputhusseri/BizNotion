@@ -11,16 +11,18 @@ const NavBar = () => {
     navigate('/login');
   };
 
-const navLinkClass = ({ isActive }) =>
-  `text-sm font-medium transition-colors hover:text-primary-foreground ${
-    isActive ? 'text-primary-foreground' : 'text-primary-foreground/60'
-  }`;
+  const navLinkClass = ({ isActive }) =>
+    `text-sm font-medium transition-colors hover:text-primary-foreground ${
+      isActive ? 'text-primary-foreground' : 'text-primary-foreground/60'
+    }`;
 
   return (
     <header className="bg-primary sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* brand */}
-        <span className="font-semibold text-base tracking-tight text-primary-foreground">BizNotion</span>
+        <span className="font-semibold text-base tracking-tight text-primary-foreground">
+          BizNotion
+        </span>
 
         {/* nav links */}
         <nav className="flex items-center gap-6">

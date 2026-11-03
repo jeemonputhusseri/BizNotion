@@ -41,18 +41,31 @@ const createInquiry = async (req, res, next) => {
 // list inquiries
 const getInquiries = async (req, res, next) => {
   try {
-    const { status } = req.query
+    const page = Math.max(1, parseInt(req.query.page) || 1)
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 10))
+    const skip = (page - 1) * limit
+
     const filter = { userId: req.user.id }
-    if (status && VALID_STATUSES.includes(status)) {
-      filter.status = status
+    if (req.query.status && VALID_STATUSES.includes(req.query.status)) {
+      filter.status = req.query.status
     }
 
-    const inquiries = await Inquiry.find(filter).sort({ date: -1 })
-    res.json({ data: inquiries, totalCount: inquiries.length, currentPage: 1, totalPages: 1, limit: 10 })
+    const [inquiries, totalCount] = await Promise.all([
+      Inquiry.find(filter).sort({ date: -1 }).skip(skip).limit(limit),
+      Inquiry.countDocuments(filter),
+    ])
+
+    res.json({
+      data: inquiries,
+      totalCount,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
+      limit,
+    })
   } catch (error) {
     next(error)
   }
-}
+};
 
 // get single inquiry
 const getInquiryById = async (req, res, next) => {
