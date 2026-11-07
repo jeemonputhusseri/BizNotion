@@ -1,10 +1,10 @@
 import ProductCard from './ProductCard';
 
-const ProductList = ({ products, onDelete }) => {
+const ProductList = ({ products, onDelete, onPaymentSuccess }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {products.map((product) => (
-        <ProductCard key={product._id} product={product} onDelete={onDelete} />
+        <ProductCard key={product._id} product={product} onDelete={onDelete}  onPaymentSuccess={onPaymentSuccess}/>
       ))}
     </div>
   );

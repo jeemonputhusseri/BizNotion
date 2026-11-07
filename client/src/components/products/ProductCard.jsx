@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import StatusBadge from '@/components/common/StatusBadge';
+import PaymentButton from './PaymentButton';
 
-const ProductCard = ({ product, onDelete }) => {
+const ProductCard = ({ product, onDelete, onPaymentSuccess }) => {
   const formattedPrice =
     product.price != null ? `Rs. ${Number(product.price).toFixed(2)}` : 'Rs. 0.00';
 
@@ -43,6 +44,9 @@ const ProductCard = ({ product, onDelete }) => {
           >
             Delete
           </Button>
+          {product.status === 'Listed' && (
+            <PaymentButton product={product} onSuccess={onPaymentSuccess} />
+          )}
         </div>
       </CardContent>
     </Card>

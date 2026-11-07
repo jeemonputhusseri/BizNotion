@@ -51,6 +51,12 @@ const ProductsPage = () => {
     }
   };
 
+  const handlePaymentSuccess = (updatedProduct) => {
+  setProducts((prev) =>
+    prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p))
+  )
+}
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -89,7 +95,7 @@ const ProductsPage = () => {
       )}
 
       {!loading && !error && products.length > 0 && (
-        <ProductList products={products} onDelete={handleDelete} />
+        <ProductList products={products} onDelete={handleDelete} onPaymentSuccess={handlePaymentSuccess} />
       )}
 
       {!loading && totalPages > 1 && (
