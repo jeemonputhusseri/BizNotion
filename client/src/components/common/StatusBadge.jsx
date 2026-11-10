@@ -4,7 +4,7 @@ const STATUS_STYLES = {
   Sold: 'bg-green-100 text-green-700',
   New: 'bg-blue-100 text-blue-700',
   Contacted: 'bg-amber-100 text-amber-700',
-  'Follow-up': 'bg-purple-100 text-purple-700',
+  'Follow up': 'bg-purple-100 text-purple-700',
   Closed: 'bg-gray-100 text-gray-700',
 };
 

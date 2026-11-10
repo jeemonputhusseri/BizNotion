@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import StatusBadge from '@/components/common/StatusBadge';
+import { useAuth } from '@/context/AuthProvider';
 
 const InquiryCard = ({ inquiry, onDelete }) => {
+  const { user } = useAuth();
   const formattedDate = new Date(inquiry.date).toLocaleDateString('en-IN', {
     day: 'numeric',
     month: 'short',
@@ -32,14 +34,16 @@ const InquiryCard = ({ inquiry, onDelete }) => {
           <Button variant="outline" size="sm" className="flex-1" asChild>
             <Link to={`/inquiries/${inquiry._id}/edit`}>Edit</Link>
           </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            className="flex-1"
-            onClick={() => onDelete(inquiry._id)}
-          >
-            Delete
-          </Button>
+          {user?.role === 'admin' && (
+            <Button
+              variant="destructive"
+              size="sm"
+              className="flex-1"
+              onClick={() => onDelete(inquiry._id)}
+            >
+              Delete
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

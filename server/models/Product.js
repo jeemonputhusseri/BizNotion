@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      default: "",
+      default: '',
     },
     imageUrl: {
       type: String,
@@ -37,7 +37,7 @@ const productSchema = new mongoose.Schema(
     },
     notes: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   { timestamps: true }

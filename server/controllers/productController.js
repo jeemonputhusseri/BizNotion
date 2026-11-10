@@ -3,12 +3,11 @@ const { validateRequiredFields } = require('../validators/inputValidators')
 
 const VALID_STATUSES = ['Draft', 'Listed', 'Sold']
 
-// create product
 const createProduct = async (req, res, next) => {
   try {
     const { name, category, price, status, description, imageUrl, notes } = req.body
 
-    // validate required fields
+    // validate required field
     const requiredError = validateRequiredFields(['name', 'category', 'price', 'status'], req.body)
     if (requiredError) {
       const err = new Error(requiredError)
@@ -16,7 +15,7 @@ const createProduct = async (req, res, next) => {
       return next(err)
     }
 
-    // validate price
+    //validate price
     if (typeof price !== 'number' || price < 0) {
       const err = new Error('Price must be a non-negative number')
       err.status = 400
@@ -56,6 +55,15 @@ const getProducts = async (req, res, next) => {
     const filter = { userId: req.user.id }
     if (req.query.status && VALID_STATUSES.includes(req.query.status)) {
       filter.status = req.query.status
+    }
+
+    if (req.query.search && req.query.search.trim()) {
+      const regex = new RegExp(req.query.search.trim(), 'i')
+      filter.$or = [
+        { name: regex },
+        { category: regex },
+        { description: regex },
+      ]
     }
 
     const [products, totalCount] = await Promise.all([

@@ -24,7 +24,6 @@ const NavBar = () => {
           BizNotion
         </span>
 
-        {/* nav links */}
         <nav className="flex items-center gap-6">
           <NavLink to="/" end className={navLinkClass}>
             Dashboard
@@ -37,7 +36,6 @@ const NavBar = () => {
           </NavLink>
         </nav>
 
-        {/* user, logout */}
         <div className="flex items-center gap-3">
           <span className="text-sm text-primary-foreground/70">{user?.name}</span>
           <Button variant="secondary" size="sm" onClick={handleLogout}>

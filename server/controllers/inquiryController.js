@@ -1,9 +1,8 @@
 const Inquiry = require('../models/Inquiry');
 const { validateRequiredFields } = require('../validators/inputValidators');
 
-const VALID_STATUSES = ['New', 'Contacted', 'Follow-up', 'Closed'];
+const VALID_STATUSES = ['New', 'Contacted', 'Follow up', 'Closed'];
 
-// create inquiry
 const createInquiry = async (req, res, next) => {
   try {
     const { customerName, contact, productInterest, status, notes, date } = req.body
@@ -15,7 +14,6 @@ const createInquiry = async (req, res, next) => {
       return next(err)
     }
 
-    // validate status
     if (status && !VALID_STATUSES.includes(status)) {
       const err = new Error('Invalid inquiry status')
       err.status = 400
@@ -38,7 +36,7 @@ const createInquiry = async (req, res, next) => {
   }
 }
 
-// list inquiries
+// list inquiri
 const getInquiries = async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1)
@@ -48,6 +46,15 @@ const getInquiries = async (req, res, next) => {
     const filter = { userId: req.user.id }
     if (req.query.status && VALID_STATUSES.includes(req.query.status)) {
       filter.status = req.query.status
+    }
+
+    if (req.query.search && req.query.search.trim()) {
+        const regex = new RegExp(req.query.search.trim(), 'i')
+        filter.$or = [
+            { customerName: regex },
+            { productInterest: regex },
+            { contact: regex },
+        ]
     }
 
     const [inquiries, totalCount] = await Promise.all([
@@ -67,7 +74,6 @@ const getInquiries = async (req, res, next) => {
   }
 };
 
-// get single inquiry
 const getInquiryById = async (req, res, next) => {
   try {
     const inquiry = await Inquiry.findOne({ _id: req.params.id, userId: req.user.id })
@@ -82,7 +88,6 @@ const getInquiryById = async (req, res, next) => {
   }
 }
 
-// update inquiry
 const updateInquiry = async (req, res, next) => {
   try {
     const { status } = req.body
@@ -108,7 +113,6 @@ const updateInquiry = async (req, res, next) => {
   }
 }
 
-// delete inquiry
 const deleteInquiry = async (req, res, next) => {
   try {
     const inquiry = await Inquiry.findOneAndDelete({ _id: req.params.id, userId: req.user.id })

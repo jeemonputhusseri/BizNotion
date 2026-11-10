@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axiosInstance from '@/api/axiosInstance';
 import { Button } from '@/components/ui/button';
 import ProductList from '@/components/products/ProductList';
+import { Input } from '@/components/ui/input';
 
 const STATUSES = ['All', 'Draft', 'Listed', 'Sold'];
 
@@ -13,13 +14,15 @@ const ProductsPage = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState('');
 
-  const fetchProducts = async (status, page) => {
+  const fetchProducts = async (status, page, searchTerm) => {
     setLoading(true);
     setError('');
     try {
       const params = { page, limit: 10 };
       if (status && status !== 'All') params.status = status;
+      if (searchTerm && searchTerm.trim()) params.search = searchTerm.trim();
       const res = await axiosInstance.get('/api/products', { params });
       setProducts(res.data.data);
       setCurrentPage(res.data.currentPage);
@@ -32,8 +35,11 @@ const ProductsPage = () => {
   };
 
   useEffect(() => {
-    fetchProducts(activeFilter, currentPage);
-  }, [activeFilter, currentPage]);
+    const timer = setTimeout(() => {
+      fetchProducts(activeFilter, currentPage, search);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [activeFilter, currentPage, search]);
 
   // reset to page 1 when filter changes
   const handleFilterChange = (status) => {
@@ -52,10 +58,8 @@ const ProductsPage = () => {
   };
 
   const handlePaymentSuccess = (updatedProduct) => {
-  setProducts((prev) =>
-    prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p))
-  )
-}
+    setProducts((prev) => prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p)));
+  };
 
   return (
     <div className="space-y-6">
@@ -65,6 +69,13 @@ const ProductsPage = () => {
           <Link to="/products/new">Add Product</Link>
         </Button>
       </div>
+
+      <Input
+        placeholder="Search products..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="max-w-sm"
+      />
 
       <div className="flex gap-2 flex-wrap">
         {STATUSES.map((s) => (
@@ -95,7 +106,11 @@ const ProductsPage = () => {
       )}
 
       {!loading && !error && products.length > 0 && (
-        <ProductList products={products} onDelete={handleDelete} onPaymentSuccess={handlePaymentSuccess} />
+        <ProductList
+          products={products}
+          onDelete={handleDelete}
+          onPaymentSuccess={handlePaymentSuccess}
+        />
       )}
 
       {!loading && totalPages > 1 && (

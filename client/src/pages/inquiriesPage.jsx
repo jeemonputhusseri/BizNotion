@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import axiosInstance from '@/api/axiosInstance';
 import { Button } from '@/components/ui/button';
 import InquiryList from '@/components/inquiries/InquiryList';
+import { Input } from '@/components/ui/input';
 
-const STATUSES = ['All', 'New', 'Contacted', 'Follow-up', 'Closed'];
+const STATUSES = ['All', 'New', 'Contacted', 'Follow up', 'Closed'];
 
 const InquiriesPage = () => {
   const [inquiries, setInquiries] = useState([]);
@@ -13,13 +14,15 @@ const InquiriesPage = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState('');
 
-  const fetchInquiries = async (status, page) => {
+  const fetchInquiries = async (status, page, searchTerm) => {
     setLoading(true);
     setError('');
     try {
       const params = { page, limit: 10 };
       if (status && status !== 'All') params.status = status;
+      if (searchTerm && searchTerm.trim()) params.search = searchTerm.trim();
       const res = await axiosInstance.get('/api/inquiries', { params });
       setInquiries(res.data.data);
       setCurrentPage(res.data.currentPage);
@@ -32,8 +35,11 @@ const InquiriesPage = () => {
   };
 
   useEffect(() => {
-    fetchInquiries(activeFilter, currentPage);
-  }, [activeFilter, currentPage]);
+    const timer = setTimeout(() => {
+      fetchInquiries(activeFilter, currentPage, search);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [activeFilter, currentPage, search]);
 
   const handleFilterChange = (status) => {
     setActiveFilter(status);
@@ -58,6 +64,13 @@ const InquiriesPage = () => {
           <Link to="/inquiries/new">Add Inquiry</Link>
         </Button>
       </div>
+
+      <Input
+        placeholder="Search inquiries..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="max-w-sm"
+      />
 
       <div className="flex gap-2 flex-wrap">
         {STATUSES.map((s) => (

@@ -3,8 +3,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import StatusBadge from '@/components/common/StatusBadge';
 import PaymentButton from './PaymentButton';
+import { useAuth } from '@/context/AuthProvider';
 
 const ProductCard = ({ product, onDelete, onPaymentSuccess }) => {
+  const { user } = useAuth();
   const formattedPrice =
     product.price != null ? `Rs. ${Number(product.price).toFixed(2)}` : 'Rs. 0.00';
 
@@ -36,14 +38,19 @@ const ProductCard = ({ product, onDelete, onPaymentSuccess }) => {
           <Button variant="outline" size="sm" className="flex-1" asChild>
             <Link to={`/products/${product._id}/edit`}>Edit</Link>
           </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            className="flex-1"
-            onClick={() => onDelete(product._id)}
-          >
-            Delete
-          </Button>
+          {user?.role === 'admin' && (
+            <Button
+              variant="destructive"
+              size="sm"
+              className="flex-1"
+              onClick={() => onDelete(product._id)}
+            >
+              Delete
+            </Button>
+          )}
+        </div>
+
+        <div className="flex gap-2 pt-2">
           {product.status === 'Listed' && (
             <PaymentButton product={product} onSuccess={onPaymentSuccess} />
           )}
