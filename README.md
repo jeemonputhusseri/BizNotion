@@ -1,6 +1,14 @@
 # BizNotion
 
-A small business CRM for tracking products and customer inquiries. MERN stack with JWT auth and Razorpay payments. This is my capstone project for the Scaler Neovarity MS CS program.
+A small business CRM for tracking products and customer inquiries. MERN stack with JWT auth and Razorpay payments. This is my capstone project for the Scaler Neovarsity MS CS program.
+
+## Live Demo
+
+Frontend: https://biznotion.netlify.app
+
+Backend API: https://biznotion-api.onrender.com
+
+Note: the backend is on Render's free tier and spins down after inactivity. The first request after a cold start may take 30-60 seconds.
 
 ## What it does
 
@@ -172,7 +180,6 @@ Create a new web service pointing at the repo with the root directory set to `se
 - `NODE_ENV` - set to production
 - `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` - use your live keys for a real deployment
 
-The server uses `cors()` with default settings, so it accepts requests from any origin. That is fine for this project. Once Render finishes the first deploy, grab the URL it gives you (something like `https://biznotion.onrender.com`) since the frontend will need it.
 
 ### Frontend on Netlify
 
@@ -188,6 +195,7 @@ One gotcha to watch for: React Router handles client-side routing, but Netlify s
 ```
 
 That tells Netlify to serve index.html for any route and let React Router sort it out. The file gets copied into `dist/` at build time.
+
 
 ## Scripts
 
