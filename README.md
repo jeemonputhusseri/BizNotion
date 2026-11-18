@@ -8,8 +8,6 @@ Frontend: https://biznotion.netlify.app
 
 Backend API: https://biznotion-api.onrender.com
 
-Note: the backend is on Render's free tier and spins down after inactivity. The first request after a cold start may take 30-60 seconds.
-
 ## What it does
 
 A small business owner needs one place to manage their product catalog and keep up with who is asking about what. So BizNotion lets you add products and tag them as Draft, Listed, or Sold. When a customer reaches out, you log an inquiry and move it through a pipeline: New, Contacted, Follow up, Closed. There is a dashboard page that shows you counts and the most recent inquiries so you can see what needs attention without digging.
