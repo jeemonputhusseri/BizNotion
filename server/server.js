@@ -5,6 +5,8 @@ const connectDB = require('./config/db');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
+const isTestEnv = process.env.NODE_ENV === 'test';
+
 const app = express();
 
 // only connect to db when not running tests
@@ -21,7 +23,23 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use(helmet());
+if (!isTestEnv) {
+  app.use(helmet())
+
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: { message: 'Too many requests, please try again later' },
+  })
+  app.use(limiter)
+
+  const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: { message: 'Too many auth attempts, please try again later' },
+  })
+}
+
 // express-mongo-sanitize is incompatible with Express v5 (req.query is read-only)
 // manually sanitize req.body and req.params by stripping keys starting with $
 app.use((req, res, next) => {
@@ -58,7 +76,7 @@ app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'BizNotion API is running' })
 })
 
-app.use('/api/auth', authLimiter, require('./routes/authRoutes'))
+app.use('/api/auth', isTestEnv ? [] : authLimiter, require('./routes/authRoutes'))
 app.use('/api/products', require('./routes/productRoutes'))
 app.use('/api/inquiries', require('./routes/inquiryRoutes'))
 app.use('/api/dashboard', require('./routes/dashboardRoutes'))

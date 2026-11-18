@@ -74,7 +74,7 @@ const ProductsPage = () => {
         placeholder="Search products..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="max-w-sm"
+        className="max-w-sm bg-white"
       />
 
       <div className="flex gap-2 flex-wrap">

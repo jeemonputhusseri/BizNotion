@@ -13,9 +13,9 @@ const ProductCard = ({ product, onDelete, onPaymentSuccess }) => {
   return (
     <Card className="overflow-hidden">
       {/* image or placeholder with product initial */}
-      <div className="aspect-square w-full bg-muted flex items-center justify-center">
-        {product.imageUrl ? (
-          <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+<div className="h-56 w-full bg-muted flex items-center justify-center overflow-hidden">
+  {product.imageUrl ? (
+    <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
         ) : (
           <span className="text-4xl font-bold text-muted-foreground/40">
             {product.name?.charAt(0).toUpperCase() || '?'}

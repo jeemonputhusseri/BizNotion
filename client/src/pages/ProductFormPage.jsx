@@ -92,7 +92,7 @@ const ProductFormPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">
-              <Label htmlFor="name">Product Name</Label>
+              <Label htmlFor="name">Product Name<span className="text-destructive">*</span></Label>
               <Input
                 id="name"
                 name="name"
@@ -104,7 +104,7 @@ const ProductFormPage = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">Category<span className="text-destructive">*</span></Label>
               <Input
                 id="category"
                 name="category"
@@ -116,7 +116,7 @@ const ProductFormPage = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="price">Price (Rs.)</Label>
+              <Label htmlFor="price">Price (Rs.)<span className="text-destructive">*</span></Label>
               <Input
                 id="price"
                 name="price"
@@ -131,7 +131,7 @@ const ProductFormPage = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">Status<span className="text-destructive">*</span></Label>
               <select
                 id="status"
                 name="status"
@@ -148,7 +148,7 @@ const ProductFormPage = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Description (optional)</Label>
               <textarea
                 id="description"
                 name="description"

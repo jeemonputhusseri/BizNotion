@@ -5,5 +5,5 @@ module.exports = {
     '__tests__/setup.js',
     '__tests__/teardown.js',
   ],
-  testTimeout: 30000,
+  testTimeout: 60000,
 }

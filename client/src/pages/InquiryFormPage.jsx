@@ -82,7 +82,7 @@ const InquiryFormPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">
-              <Label htmlFor="customerName">Customer Name</Label>
+              <Label htmlFor="customerName">Customer Name<span className="text-destructive">*</span></Label>
               <Input
                 id="customerName"
                 name="customerName"
@@ -94,7 +94,7 @@ const InquiryFormPage = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="contact">Contact</Label>
+              <Label htmlFor="contact">Contact<span className="text-destructive">*</span></Label>
               <Input
                 id="contact"
                 name="contact"
@@ -106,7 +106,7 @@ const InquiryFormPage = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="productInterest">Product Interest</Label>
+              <Label htmlFor="productInterest">Product Interest<span className="text-destructive">*</span></Label>
               <Input
                 id="productInterest"
                 name="productInterest"
@@ -118,7 +118,7 @@ const InquiryFormPage = () => {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">Status<span className="text-destructive">*</span></Label>
               <select
                 id="status"
                 name="status"
