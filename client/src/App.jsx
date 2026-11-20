@@ -10,6 +10,8 @@ import InquiriesPage from './pages/InquiriesPage';
 import InquiryFormPage from './pages/InquiryFormPage';
 import UsersPage from './pages/UsersPage';
 import UserDetailPage from './pages/UserDetailPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 function App() {
   return (
@@ -111,6 +113,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:userId" element={<ResetPasswordPage />} />
       </Routes>
     </BrowserRouter>
   );

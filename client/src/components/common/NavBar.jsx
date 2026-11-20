@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthProvider';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Package, MessageSquare, Users, Briefcase  } from 'lucide-react';
+import { LayoutDashboard, Package, MessageSquare, Users, Briefcase } from 'lucide-react';
 
 const NavBar = () => {
   const { user, logout } = useAuth();
@@ -20,13 +20,12 @@ const NavBar = () => {
   return (
     <header className="bg-primary/80 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
-      <div className="flex items-center gap-2 shrink-0">
-        <Briefcase className="h-5 w-5 text-primary-foreground" />
-        <span className="font-semibold text-base tracking-tight text-primary-foreground">
-          BizNotion
-        </span>
-      </div>
-
+        <div className="flex items-center gap-2 shrink-0">
+          <Briefcase className="h-5 w-5 text-primary-foreground" />
+          <span className="font-semibold text-base tracking-tight text-primary-foreground">
+            BizNotion
+          </span>
+        </div>
 
         <nav className="flex items-center gap-4">
           <NavLink to="/" end className={navLinkClass}>
