@@ -5,7 +5,7 @@ import StatusBadge from '@/components/common/StatusBadge';
 import PaymentButton from './PaymentButton';
 import { useAuth } from '@/context/AuthProvider';
 
-const ProductCard = ({ product, onDelete, onPaymentSuccess }) => {
+const ProductCard = ({ product, onDelete, onPaymentSuccess, readOnly }) => {
   const { user } = useAuth();
   const formattedPrice =
     product.price != null ? `Rs. ${Number(product.price).toFixed(2)}` : 'Rs. 0.00';
@@ -13,9 +13,9 @@ const ProductCard = ({ product, onDelete, onPaymentSuccess }) => {
   return (
     <Card className="overflow-hidden">
       {/* image or placeholder with product initial */}
-<div className="h-56 w-full bg-muted flex items-center justify-center overflow-hidden">
-  {product.imageUrl ? (
-    <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+      <div className="h-56 w-full bg-muted flex items-center justify-center overflow-hidden">
+        {product.imageUrl ? (
+          <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
         ) : (
           <span className="text-4xl font-bold text-muted-foreground/40">
             {product.name?.charAt(0).toUpperCase() || '?'}
@@ -38,7 +38,7 @@ const ProductCard = ({ product, onDelete, onPaymentSuccess }) => {
           <Button variant="outline" size="sm" className="flex-1" asChild>
             <Link to={`/products/${product._id}/edit`}>Edit</Link>
           </Button>
-          {user?.role === 'admin' && (
+          {
             <Button
               variant="destructive"
               size="sm"
@@ -47,11 +47,11 @@ const ProductCard = ({ product, onDelete, onPaymentSuccess }) => {
             >
               Delete
             </Button>
-          )}
+          }
         </div>
 
         <div className="flex gap-2 pt-2">
-          {product.status === 'Listed' && (
+          {product.status === 'Listed' && !readOnly && (
             <PaymentButton product={product} onSuccess={onPaymentSuccess} />
           )}
         </div>

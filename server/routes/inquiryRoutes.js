@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const { protect } = require('../middleware/authMiddleware')
-const { requireRole } = require('../middleware/requireRole')
 
 const {
   createInquiry,
@@ -17,6 +16,6 @@ router.get('/', getInquiries)
 router.get('/:id', getInquiryById)
 router.post('/', createInquiry)
 router.put('/:id', updateInquiry)
-router.delete('/:id', requireRole('admin'), deleteInquiry)
+router.delete('/:id', deleteInquiry)
 
 module.exports = router

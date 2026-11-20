@@ -8,6 +8,8 @@ import ProductsPage from './pages/ProductsPage';
 import ProductFormPage from './pages/ProductFormPage';
 import InquiriesPage from './pages/InquiriesPage';
 import InquiryFormPage from './pages/InquiryFormPage';
+import UsersPage from './pages/UsersPage';
+import UserDetailPage from './pages/UserDetailPage';
 
 function App() {
   return (
@@ -85,6 +87,26 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <InquiryFormPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UsersPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users/:userId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UserDetailPage />
               </Layout>
             </ProtectedRoute>
           }

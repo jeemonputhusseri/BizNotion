@@ -33,6 +33,11 @@ const NavBar = () => {
           <NavLink to="/inquiries" className={navLinkClass}>
             Inquiries
           </NavLink>
+          {user?.role === 'admin' && (
+            <NavLink to="/admin/users" className={navLinkClass}>
+              Users
+            </NavLink>
+          )}
         </nav>
 
         <div className="flex items-center gap-2 shrink-0">

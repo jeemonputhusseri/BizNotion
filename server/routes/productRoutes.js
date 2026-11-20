@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const { protect } = require('../middleware/authMiddleware')
-const { requireRole } = require('../middleware/requireRole')
 
 const {
   createProduct,
@@ -18,6 +17,6 @@ router.get('/', getProducts)
 router.get('/:id', getProductById)
 router.post('/', createProduct)
 router.put('/:id', updateProduct)
-router.delete('/:id', requireRole('admin'), deleteProduct)
+router.delete('/:id', deleteProduct)
 
 module.exports = router

@@ -34,7 +34,7 @@ const InquiryCard = ({ inquiry, onDelete }) => {
           <Button variant="outline" size="sm" className="flex-1" asChild>
             <Link to={`/inquiries/${inquiry._id}/edit`}>Edit</Link>
           </Button>
-          {user?.role === 'admin' && (
+          {
             <Button
               variant="destructive"
               size="sm"
@@ -43,7 +43,7 @@ const InquiryCard = ({ inquiry, onDelete }) => {
             >
               Delete
             </Button>
-          )}
+          }
         </div>
       </CardContent>
     </Card>

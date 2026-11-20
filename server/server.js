@@ -4,6 +4,8 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const adminRoutes = require('./routes/adminRoutes')
+
 
 const isTestEnv = process.env.NODE_ENV === 'test';
 
@@ -23,6 +25,12 @@ app.use(cors({
 
 app.use(express.json());
 
+
+  const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: { message: 'Too many auth attempts, please try again later' },
+  })
 if (!isTestEnv) {
   app.use(helmet())
 
@@ -32,13 +40,9 @@ if (!isTestEnv) {
     message: { message: 'Too many requests, please try again later' },
   })
   app.use(limiter)
-
-  const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 10,
-    message: { message: 'Too many auth attempts, please try again later' },
-  })
 }
+
+app.use('/api/admin', adminRoutes)
 
 // express-mongo-sanitize is incompatible with Express v5 (req.query is read-only)
 // manually sanitize req.body and req.params by stripping keys starting with $
@@ -57,19 +61,6 @@ app.use((req, res, next) => {
   stripDollar(req.body)
   stripDollar(req.params)
   next()
-})
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: { message: 'Too many requests, please try again later' },
-})
-app.use(limiter);
-
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10,
-  message: { message: 'Too many auth attempts, please try again later' },
 })
 
 app.get('/', (req, res) => {
