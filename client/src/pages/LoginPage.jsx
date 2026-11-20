@@ -82,6 +82,15 @@ const LoginPage = () => {
                 required
               />
             </div>
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={() => navigate('/forgot-password')}
+                className="text-sm text-primary hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Signing in....' : 'Sign in'}
             </Button>

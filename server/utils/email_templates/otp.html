@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background-color: #4f46e5; color: white; padding: 20px; text-align: center; }
+    .content { padding: 30px; background-color: #f9fafb; }
+    .otp-box { background-color: #4f46e5; color: white; font-size: 32px; font-weight: bold; text-align: center; padding: 20px; margin: 20px 0; letter-spacing: 8px; }
+    .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+    .warning { color: #dc2626; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Password Reset Request</h1>
+    </div>
+    <div class="content">
+      <h2>Hi #{name},</h2>
+      <p>You requested to reset your password. Use the OTP below to proceed:</p>
+      <div class="otp-box">#{otp}</div>
+      <p>This OTP is valid for <strong>10 minutes</strong>.</p>
+      <p class="warning">If you did not request this, please ignore this email and your password will remain unchanged.</p>
+    </div>
+    <div class="footer">
+      <p>BizNotion - Manage your business with ease</p>
+    </div>
+  </div>
+</body>
+</html>
