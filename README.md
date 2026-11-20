@@ -17,6 +17,8 @@ Razorpay is wired in on the product side. A customer can pay for a Listed produc
 ## Features
 
 - User registration and login with JWT auth, passwords hashed with bcrypt
+- Forgot password with OTP-based reset via email
+- Welcome emails sent automatically on user registration
 - Role-based access control with admin user management dashboard
 - Product CRUD with status tracking (Draft, Listed, Sold)
 - Inquiry CRUD with a status pipeline (New, Contacted, Follow-up, Closed)
@@ -40,10 +42,22 @@ BizNotion supports two user roles:
 
 To create an admin user, set the `role` field to `"admin"` directly in MongoDB. New users default to `"user"` role.
 
+## Email features
+
+BizNotion uses SendGrid with nodemailer to send transactional emails.
+
+**Welcome emails** - When a user registers, they receive a welcome email with information about the platform. If email sending fails, registration still succeeds and the error is logged.
+
+**Password reset** - Users can request a password reset from the login page. An OTP (one-time password) is generated and emailed. The OTP expires after 10 minutes. Users enter the OTP along with their new password to complete the reset.
+
+Email templates are HTML files stored in `server/utils/email_templates/` with placeholder variables like `#{name}` and `#{otp}` that get replaced with actual data before sending.
+
+
 ## Tech stack
 
 Backend runs on Node.js with Express v5 and MongoDB through Mongoose v9.
 Auth uses JWT signed with a secret, passwords hashed with bcrypt.
+Email sending uses nodemailer with SendGrid SMTP for welcome emails and OTP-based password resets.
 Helmet handles HTTP header security and there is rate limiting on all routes (tighter on auth).
 Razorpay handles payments.
 Tests run on Jest with Supertest, and mongodb-memory-server gives each test run a throwaway database so nothing ever touches your real Atlas instance.
@@ -75,6 +89,8 @@ PORT=5000
 NODE_ENV=development
 RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+SENDGRID_API_KEY=your_sendgrid_api_key
+FROM_EMAIL=your_verified_sender_email@example.com
 ```
 
 And one in `client/`:
@@ -85,6 +101,20 @@ VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
 ```
 
 Both are gitignored already, so they will not end up in a commit.
+
+### SendGrid setup for emails
+
+1. Sign up at https://sendgrid.com (free tier: 100 emails/day)
+2. Navigate to Settings > API Keys
+3. Create a new API key with Full Access permissions
+4. Copy the key (starts with `SG.`) and add to `server/.env` as `SENDGRID_API_KEY`
+5. Go to Settings > Sender Authentication
+6. Click "Single Sender Verification" and create a new sender
+7. Verify your email address by clicking the link sent to your inbox
+8. Add the verified email to `server/.env` as `FROM_EMAIL`
+
+For development testing with dummy emails, the OTP will be logged to the server console if email sending fails.
+
 
 ### Running it
 
@@ -101,14 +131,18 @@ From `client/`, `npm run dev` fires up the Vite dev server on 5173. It sends API
 ```
 server/
   config/db.js              - mongoose connection
-  controllers/               - auth, product, inquiry, dashboard, payment
-  middleware/                - auth, error handler, , requireAdmin
+  controllers/               - auth, product, inquiry, dashboard, payment, admin
+  middleware/                - auth, error handler, requireAdmin
   models/                   - User, Product, Inquiry
-  routes/                   - auth, product, inquiry, dashboard, payment
+  routes/                   - auth, product, inquiry, dashboard, payment, admin
   validators/               - input validation
+  utils/
+    emailSender.js           - nodemailer email utility
+    email_templates/         - HTML email templates (welcome, OTP)
   __tests__/                - setup, teardown, auth tests
   server.js                 - express app and entry point
   jest.config.js
+
 
 client/src/
   api/axiosInstance.js      - axios instance with request/response interceptors
@@ -131,6 +165,8 @@ Everything except the auth routes needs `Authorization: Bearer <token>` in the h
 ```
 POST   /api/auth/register            - register, no auth
 POST   /api/auth/login               - login, returns JWT, no auth
+POST   /api/auth/forgot-password     - request password reset OTP, no auth
+POST   /api/auth/reset-password/:userId  - reset password with OTP, no auth
 
 GET    /api/products                 - list, paginated and filterable
 POST   /api/products                 - create
@@ -151,6 +187,7 @@ GET    /api/admin/users              - list all users with stats (admin only)
 GET    /api/admin/users/:userId/products     - get specific user's products (admin only)
 GET    /api/admin/users/:userId/inquiries    - get specific user's inquiries (admin only)
 
+
 ```
 
 The list endpoints take `?page=` and `?limit=` (default page 1, limit 10, max 50). The response gives you back `data`, `totalCount`, `currentPage`, `totalPages`, and `limit`, so the frontend has everything it needs to render pagination in one trip.
@@ -163,7 +200,7 @@ Product has a `userId` ref back to the owner, plus `name`, `category`, `price`, 
 
 Inquiry also refs the owning user. It has `customerName`, `contact` (phone or email), an optional `productInterest`, a `status` that runs New -> Contacted -> Follow-up -> Closed (defaults to New), and `notes`. The `date` field defaults to `Date.now` without parentheses, so Mongoose calls the function when a new inquiry is created rather than stamping every record with the server start time.
 
-The User model stores `name`, `email` (unique, lowercased), a bcrypt `passwordHash`, and a `role` field that can be either `"user"` (default) or `"admin"`. The password never gets stored or returned in plaintext. Admins have access to the user management dashboard where they can view all users and their data.
+The User model stores `name`, `email` (unique, lowercased), a bcrypt `passwordHash`, and a `role` field that can be either `"user"` (default) or `"admin"`. For password resets, the model includes optional `otp` and `otpExpiry` fields that store the one-time password and its expiration time. The password never gets stored or returned in plaintext. Admins have access to the user management dashboard where they can view all users and their data.
 
 
 ## How auth works
@@ -194,6 +231,8 @@ Create a new web service pointing at the repo with the root directory set to `se
 - `PORT` - Render sets this automatically, but you can leave the default
 - `NODE_ENV` - set to production
 - `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` - use your live keys for a real deployment
+- `SENDGRID_API_KEY` - your SendGrid API key
+- `FROM_EMAIL` - your verified sender email address
 
 
 ### Frontend on Netlify
@@ -218,6 +257,7 @@ server/
 - `npm run dev` - nodemon with auto-reload
 - `npm start` - production start
 - `npm test` - jest test suite
+- `npm run format` - prettier write
 
 client/
 - `npm run dev` - vite dev server
