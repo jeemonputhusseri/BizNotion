@@ -155,7 +155,7 @@ client/src/
   context/AuthProvider.jsx
   hooks/useAuth.js
   lib/utils.js              - cn() className helper
-  pages/                    - Login, Register, Dashboard, Products, ProductForm, Inquiries, InquiryForm, UsersPage, UserDetailPage
+  pages/ - Login, Register, ForgotPassword, ResetPassword, Dashboard, Products ProductForm, Inquiries, InquiryForm, UsersPage, UserDetailPage, Inquiries InquiryForm, UsersPage, UserDetailPage
 ```
 
 ## API

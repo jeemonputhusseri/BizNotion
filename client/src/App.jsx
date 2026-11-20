@@ -10,8 +10,8 @@ import InquiriesPage from './pages/InquiriesPage';
 import InquiryFormPage from './pages/InquiryFormPage';
 import UsersPage from './pages/UsersPage';
 import UserDetailPage from './pages/UserDetailPage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import ResetPasswordPage from './pages/ResetPasswordPage';
+import ForgotPasswordPage from './pages/ForgotPassword';
+import ResetPasswordPage from './pages/ResetPassword';
 
 function App() {
   return (
