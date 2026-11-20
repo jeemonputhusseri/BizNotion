@@ -25,22 +25,23 @@ app.use(cors({
 
 app.use(express.json());
 
-
   const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10,
     message: { message: 'Too many auth attempts, please try again later' },
   })
-if (!isTestEnv) {
-  app.use(helmet())
+  
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
     message: { message: 'Too many requests, please try again later' },
   })
-  app.use(limiter)
-}
+
+  if (!isTestEnv) {
+    app.use(helmet())
+    app.use(limiter)
+  }
 
 app.use('/api/admin', adminRoutes)
 

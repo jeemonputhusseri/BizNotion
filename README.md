@@ -17,6 +17,7 @@ Razorpay is wired in on the product side. A customer can pay for a Listed produc
 ## Features
 
 - User registration and login with JWT auth, passwords hashed with bcrypt
+- Role-based access control with admin user management dashboard
 - Product CRUD with status tracking (Draft, Listed, Sold)
 - Inquiry CRUD with a status pipeline (New, Contacted, Follow-up, Closed)
 - Dashboard page with aggregate counts and recent inquiries at a glance
@@ -28,6 +29,16 @@ Razorpay is wired in on the product side. A customer can pay for a Listed produc
 - Security middleware: Helmet headers, rate limiting, and NoSQL injection sanitization
 - Responsive UI built with Tailwind CSS and shadcn/ui
 - Backend tests with Jest, Supertest, and an in-memory MongoDB
+
+## User roles
+
+BizNotion supports two user roles:
+
+**Regular users** - Each business owner registers and gets their own isolated workspace. They manage their own products and inquiries, and the dashboard shows only their data. Regular users cannot see or access data from other accounts.
+
+**Admin users** - Platform administrators can view all registered users through the Users management page. Admins can see any user's products and inquiries, useful for providing support or monitoring platform usage. Admin users have full CRUD permissions across all data.
+
+To create an admin user, set the `role` field to `"admin"` directly in MongoDB. New users default to `"user"` role.
 
 ## Tech stack
 
@@ -91,7 +102,7 @@ From `client/`, `npm run dev` fires up the Vite dev server on 5173. It sends API
 server/
   config/db.js              - mongoose connection
   controllers/               - auth, product, inquiry, dashboard, payment
-  middleware/                - auth, requireRole, error handler
+  middleware/                - auth, error handler, , requireAdmin
   models/                   - User, Product, Inquiry
   routes/                   - auth, product, inquiry, dashboard, payment
   validators/               - input validation
@@ -110,7 +121,7 @@ client/src/
   context/AuthProvider.jsx
   hooks/useAuth.js
   lib/utils.js              - cn() className helper
-  pages/                    - Login, Register, Dashboard, Products, ProductForm, Inquiries, InquiryForm
+  pages/                    - Login, Register, Dashboard, Products, ProductForm, Inquiries, InquiryForm, UsersPage, UserDetailPage
 ```
 
 ## API
@@ -135,6 +146,11 @@ GET    /api/dashboard                - counts and recent inquiries
 
 POST   /api/payments/create-order    - create a Razorpay order
 POST   /api/payments/verify          - verify signature, mark product Sold
+
+GET    /api/admin/users              - list all users with stats (admin only)
+GET    /api/admin/users/:userId/products     - get specific user's products (admin only)
+GET    /api/admin/users/:userId/inquiries    - get specific user's inquiries (admin only)
+
 ```
 
 The list endpoints take `?page=` and `?limit=` (default page 1, limit 10, max 50). The response gives you back `data`, `totalCount`, `currentPage`, `totalPages`, and `limit`, so the frontend has everything it needs to render pagination in one trip.
@@ -143,11 +159,12 @@ Errors always come back as `{ "message": "..." }`. Controllers catch unexpected 
 
 ## Data models
 
-The User model stores `name`, `email` (unique, lowercased), a bcrypt `passwordHash`, and a `role` that defaults to "user". The password never gets stored or returned in plaintext.
-
 Product has a `userId` ref back to the owner, plus `name`, `category`, `price`, and a `status` field that goes Draft -> Listed -> Sold (defaults to Draft). There are optional `description`, `imageUrl`, and `notes` fields, and Mongoose timestamps handle createdAt/updatedAt.
 
 Inquiry also refs the owning user. It has `customerName`, `contact` (phone or email), an optional `productInterest`, a `status` that runs New -> Contacted -> Follow-up -> Closed (defaults to New), and `notes`. The `date` field defaults to `Date.now` without parentheses, so Mongoose calls the function when a new inquiry is created rather than stamping every record with the server start time.
+
+The User model stores `name`, `email` (unique, lowercased), a bcrypt `passwordHash`, and a `role` field that can be either `"user"` (default) or `"admin"`. The password never gets stored or returned in plaintext. Admins have access to the user management dashboard where they can view all users and their data.
+
 
 ## How auth works
 
