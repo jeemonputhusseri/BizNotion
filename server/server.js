@@ -11,6 +11,10 @@ const isTestEnv = process.env.NODE_ENV === 'test';
 
 const app = express();
 
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // only connect to db when not running tests
 // tests handle the connection via mongodbmemoryserver in setup.js
 if (process.env.NODE_ENV !== 'test') {

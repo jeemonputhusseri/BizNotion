@@ -1,45 +1,22 @@
-const nodemailer = require('nodemailer');
-const fs = require('fs').promises;
-const path = require('path');
+const sgMail = require('@sendgrid/mail');
 
-const { SENDGRID_API_KEY, FROM_EMAIL } = process.env;
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-function replaceContent(content, data) {
-  let result = content;
-  Object.keys(data).forEach(key => {
-    const placeholder = new RegExp(`#{${key}}`, 'g');
-    result = result.replace(placeholder, data[key]);
-  });
-  return result;
-}
+const sendEmail = async (to, subject, htmlContent) => {
+  const msg = {
+    to,
+    from: process.env.FROM_EMAIL,
+    subject,
+    html: htmlContent,
+  };
 
-async function sendEmail(templateName, recipientEmail, data) {
   try {
-    const templatePath = path.join(__dirname, 'email_templates', templateName);
-    const content = await fs.readFile(templatePath, 'utf-8');
-
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      auth: {
-        user: 'apikey',
-        pass: SENDGRID_API_KEY
-      }
-    });
-
-    const mailOptions = {
-      from: FROM_EMAIL,
-      to: recipientEmail,
-      subject: data.subject || 'BizNotion Notification',
-      html: replaceContent(content, data)
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent to ${recipientEmail}`);
+    await sgMail.send(msg);
+    console.log(`Email sent to ${to}`);
   } catch (error) {
-    console.error('Email sending failed:', error);
+    console.error('Email sending failed:', error.message);
     throw error;
   }
-}
+};
 
-module.exports = sendEmail;
+module.exports = { sendEmail };
